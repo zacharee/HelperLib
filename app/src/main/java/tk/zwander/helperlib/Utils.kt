@@ -9,15 +9,18 @@ import android.graphics.PaintFlagsDrawFilter
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import kotlin.math.roundToInt
 
 /**
  * Context
  */
 
 fun Context.dpAsPx(dpVal: Number) =
-        Math.round(
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal.toFloat(), resources.displayMetrics)
-        )
+    TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dpVal.toFloat(),
+        resources.displayMetrics
+    ).roundToInt()
 
 /**
  * Drawable
@@ -25,7 +28,7 @@ fun Context.dpAsPx(dpVal: Number) =
 
 fun Drawable.toBitmap(): Bitmap? {
     return when (this) {
-        is BitmapDrawable -> bitmap
+        is BitmapDrawable -> bitmap.copy(Bitmap.Config.ARGB_8888, true)
         else -> {
             (if (intrinsicWidth <= 0 || intrinsicHeight <= 0) {
                 Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
